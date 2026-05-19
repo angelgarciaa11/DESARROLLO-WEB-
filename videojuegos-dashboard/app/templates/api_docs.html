@@ -1,0 +1,431 @@
+{% extends "base.html" %}
+
+{% block title %}Documentación API - Videojuegos Dashboard{% endblock %}
+
+{% block content %}
+<div class="api-docs-container">
+    <h1>📚 Documentación de la API</h1>
+    
+    <div class="api-info-section">
+        <h2>Información General</h2>
+        <div class="info-card">
+            <p><strong>Nombre:</strong> <span id="api-title">Cargando...</span></p>
+            <p><strong>Versión:</strong> <span id="api-version">Cargando...</span></p>
+            <p><strong>Descripción:</strong> <span id="api-description">Cargando...</span></p>
+            <p><strong>URL Base:</strong> <code id="api-base-url">Cargando...</code></p>
+            <p><strong>Estado:</strong> <span id="api-status" class="status-badge status-healthy">Cargando...</span></p>
+        </div>
+    </div>
+
+    <div class="endpoints-section">
+        <h2>Endpoints Disponibles</h2>
+        
+        <div class="endpoints-list">
+            <!-- Documentación -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method-badge method-get">GET</span>
+                    <code class="endpoint-path">/api/v1/docs</code>
+                </div>
+                <div class="endpoint-body">
+                    <p class="endpoint-description">Obtener documentación completa de la API</p>
+                    <div class="endpoint-details">
+                        <h4>Parámetros:</h4>
+                        <p class="no-params">Sin parámetros</p>
+                        
+                        <h4>Ejemplo de Respuesta:</h4>
+                        <pre class="response-example">{
+  "api": {
+    "title": "Videojuegos Dashboard API",
+    "version": "1.0.0",
+    "description": "API para acceder a datos de videojuegos"
+  },
+  "endpoints": { ... }
+}</pre>
+                    </div>
+                    <button class="btn btn-small btn-test" onclick="testEndpoint('/api/v1/docs')">Probar</button>
+                </div>
+            </div>
+
+            <!-- Estadísticas Generales -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method-badge method-get">GET</span>
+                    <code class="endpoint-path">/api/v1/stats</code>
+                </div>
+                <div class="endpoint-body">
+                    <p class="endpoint-description">Obtener estadísticas generales del dashboard</p>
+                    <div class="endpoint-details">
+                        <h4>Parámetros:</h4>
+                        <p class="no-params">Sin parámetros</p>
+                        
+                        <h4>Ejemplo de Respuesta:</h4>
+                        <pre class="response-example">{
+  "status": "success",
+  "data": {
+    "total_games": 7112,
+    "total_platforms": 17,
+    "total_genres": 12,
+    "total_publishers": 278,
+    "global_sales": 8920.56
+  }
+}</pre>
+                    </div>
+                    <button class="btn btn-small btn-test" onclick="testEndpoint('/api/v1/stats')">Probar</button>
+                </div>
+            </div>
+
+            <!-- Ventas por Región -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method-badge method-get">GET</span>
+                    <code class="endpoint-path">/api/v1/sales-by-region</code>
+                </div>
+                <div class="endpoint-body">
+                    <p class="endpoint-description">Obtener ventas totales por región</p>
+                    <div class="endpoint-details">
+                        <h4>Parámetros:</h4>
+                        <p class="no-params">Sin parámetros</p>
+                        
+                        <h4>Ejemplo de Respuesta:</h4>
+                        <pre class="response-example">{
+  "status": "success",
+  "data": {
+    "NA": 4296.49,
+    "EU": 2771.36,
+    "JP": 1291.36,
+    "Other": 561.39
+  }
+}</pre>
+                    </div>
+                    <button class="btn btn-small btn-test" onclick="testEndpoint('/api/v1/sales-by-region')">Probar</button>
+                </div>
+            </div>
+
+            <!-- Top Plataformas -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method-badge method-get">GET</span>
+                    <code class="endpoint-path">/api/v1/top-platforms</code>
+                </div>
+                <div class="endpoint-body">
+                    <p class="endpoint-description">Obtener las plataformas más populares</p>
+                    <div class="endpoint-details">
+                        <h4>Parámetros Opcionales:</h4>
+                        <ul class="params-list">
+                            <li><code>limit</code> (integer, default: 10) - Número de plataformas a retornar</li>
+                        </ul>
+                        
+                        <h4>Ejemplo de Respuesta:</h4>
+                        <pre class="response-example">{
+  "status": "success",
+  "data": {
+    "platforms": ["PS2", "X360", "PS3"],
+    "sales": [1982.53, 1736.48, 1277.47]
+  }
+}</pre>
+                    </div>
+                    <button class="btn btn-small btn-test" onclick="testEndpoint('/api/v1/top-platforms?limit=5')">Probar</button>
+                </div>
+            </div>
+
+            <!-- Top Géneros -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method-badge method-get">GET</span>
+                    <code class="endpoint-path">/api/v1/top-genres</code>
+                </div>
+                <div class="endpoint-body">
+                    <p class="endpoint-description">Obtener géneros ordenados por ventas</p>
+                    <div class="endpoint-details">
+                        <h4>Parámetros:</h4>
+                        <p class="no-params">Sin parámetros</p>
+                        
+                        <h4>Ejemplo de Respuesta:</h4>
+                        <pre class="response-example">{
+  "status": "success",
+  "data": {
+    "genres": ["Action", "Sports", "Shooter"],
+    "sales": [1751.29, 1330.77, 1251.53]
+  }
+}</pre>
+                    </div>
+                    <button class="btn btn-small btn-test" onclick="testEndpoint('/api/v1/top-genres')">Probar</button>
+                </div>
+            </div>
+
+            <!-- Top Editores -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method-badge method-get">GET</span>
+                    <code class="endpoint-path">/api/v1/top-publishers</code>
+                </div>
+                <div class="endpoint-body">
+                    <p class="endpoint-description">Obtener los editores más exitosos</p>
+                    <div class="endpoint-details">
+                        <h4>Parámetros Opcionales:</h4>
+                        <ul class="params-list">
+                            <li><code>limit</code> (integer, default: 15) - Número de editores a retornar</li>
+                        </ul>
+                        
+                        <h4>Ejemplo de Respuesta:</h4>
+                        <pre class="response-example">{
+  "status": "success",
+  "data": {
+    "publishers": ["Nintendo", "Electronic Arts", "Activision"],
+    "sales": [1797.32, 1146.68, 1084.32]
+  }
+}</pre>
+                    </div>
+                    <button class="btn btn-small btn-test" onclick="testEndpoint('/api/v1/top-publishers?limit=10')">Probar</button>
+                </div>
+            </div>
+
+            <!-- Distribución de Calificaciones -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method-badge method-get">GET</span>
+                    <code class="endpoint-path">/api/v1/rating-distribution</code>
+                </div>
+                <div class="endpoint-body">
+                    <p class="endpoint-description">Obtener distribución de calificaciones ESRB</p>
+                    <div class="endpoint-details">
+                        <h4>Parámetros:</h4>
+                        <p class="no-params">Sin parámetros</p>
+                        
+                        <h4>Ejemplo de Respuesta:</h4>
+                        <pre class="response-example">{
+  "status": "success",
+  "data": {
+    "ratings": ["E", "T", "M", "AO"],
+    "counts": [1296, 1331, 1296, 95]
+  }
+}</pre>
+                    </div>
+                    <button class="btn btn-small btn-test" onclick="testEndpoint('/api/v1/rating-distribution')">Probar</button>
+                </div>
+            </div>
+
+            <!-- Videojuegos -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method-badge method-get">GET</span>
+                    <code class="endpoint-path">/api/v1/games</code>
+                </div>
+                <div class="endpoint-body">
+                    <p class="endpoint-description">Obtener lista de videojuegos con filtros y paginación</p>
+                    <div class="endpoint-details">
+                        <h4>Parámetros Opcionales:</h4>
+                        <ul class="params-list">
+                            <li><code>platform</code> (string, default: "all") - Filtrar por plataforma</li>
+                            <li><code>genre</code> (string, default: "all") - Filtrar por género</li>
+                            <li><code>publisher</code> (string, default: "all") - Filtrar por editor</li>
+                            <li><code>page</code> (integer, default: 1) - Número de página</li>
+                            <li><code>per_page</code> (integer, default: 50) - Videojuegos por página</li>
+                        </ul>
+                        
+                        <h4>Ejemplo de Respuesta:</h4>
+                        <pre class="response-example">{
+  "status": "success",
+  "data": {
+    "games": [...],
+    "total": 7112,
+    "page": 1,
+    "per_page": 50,
+    "pages": 143
+  }
+}</pre>
+                    </div>
+                    <button class="btn btn-small btn-test" onclick="testEndpoint('/api/v1/games?page=1&per_page=5')">Probar</button>
+                </div>
+            </div>
+
+            <!-- Filtros -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method-badge method-get">GET</span>
+                    <code class="endpoint-path">/api/v1/filters</code>
+                </div>
+                <div class="endpoint-body">
+                    <p class="endpoint-description">Obtener opciones disponibles para filtros</p>
+                    <div class="endpoint-details">
+                        <h4>Parámetros:</h4>
+                        <p class="no-params">Sin parámetros</p>
+                        
+                        <h4>Ejemplo de Respuesta:</h4>
+                        <pre class="response-example">{
+  "status": "success",
+  "data": {
+    "platforms": ["DS", "PS", "PS2", "PS3"],
+    "genres": ["Action", "Adventure", "Fighting"],
+    "publishers": ["Activision", "Electronic Arts"]
+  }
+}</pre>
+                    </div>
+                    <button class="btn btn-small btn-test" onclick="testEndpoint('/api/v1/filters')">Probar</button>
+                </div>
+            </div>
+
+            <!-- Estadísticas de Plataforma -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method-badge method-get">GET</span>
+                    <code class="endpoint-path">/api/v1/platform-stats/&lt;platform&gt;</code>
+                </div>
+                <div class="endpoint-body">
+                    <p class="endpoint-description">Obtener estadísticas de una plataforma específica</p>
+                    <div class="endpoint-details">
+                        <h4>Parámetros de Ruta:</h4>
+                        <ul class="params-list">
+                            <li><code>platform</code> (string) - Nombre de la plataforma</li>
+                        </ul>
+                        
+                        <h4>Ejemplo de Respuesta:</h4>
+                        <pre class="response-example">{
+  "status": "success",
+  "data": {
+    "platform": "PS2",
+    "total_games": 1169,
+    "total_sales": 1982.53,
+    "avg_sales": 1.69
+  }
+}</pre>
+                    </div>
+                    <button class="btn btn-small btn-test" onclick="testEndpoint('/api/v1/platform-stats/PS2')">Probar</button>
+                </div>
+            </div>
+
+            <!-- Búsqueda -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method-badge method-get">GET</span>
+                    <code class="endpoint-path">/api/v1/search</code>
+                </div>
+                <div class="endpoint-body">
+                    <p class="endpoint-description">Buscar videojuegos por criterios</p>
+                    <div class="endpoint-details">
+                        <h4>Parámetros Requeridos:</h4>
+                        <ul class="params-list">
+                            <li><code>q</code> (string) - Término de búsqueda</li>
+                        </ul>
+                        
+                        <h4>Parámetros Opcionales:</h4>
+                        <ul class="params-list">
+                            <li><code>type</code> (string, default: "all") - Tipo: platform, genre, publisher, all</li>
+                        </ul>
+                        
+                        <h4>Ejemplo de Respuesta:</h4>
+                        <pre class="response-example">{
+  "status": "success",
+  "data": {
+    "query": "PS",
+    "type": "all",
+    "results": [...],
+    "total_results": 2
+  }
+}</pre>
+                    </div>
+                    <button class="btn btn-small btn-test" onclick="testEndpoint('/api/v1/search?q=PS&type=platform')">Probar</button>
+                </div>
+            </div>
+
+            <!-- Health Check -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method-badge method-get">GET</span>
+                    <code class="endpoint-path">/api/v1/health</code>
+                </div>
+                <div class="endpoint-body">
+                    <p class="endpoint-description">Verificar el estado de la API</p>
+                    <div class="endpoint-details">
+                        <h4>Parámetros:</h4>
+                        <p class="no-params">Sin parámetros</p>
+                        
+                        <h4>Ejemplo de Respuesta:</h4>
+                        <pre class="response-example">{
+  "status": "healthy",
+  "version": "1.0.0",
+  "timestamp": "2024-05-19T22:30:00",
+  "data_loaded": true,
+  "total_records": 7112
+}</pre>
+                    </div>
+                    <button class="btn btn-small btn-test" onclick="testEndpoint('/api/v1/health')">Probar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para resultados -->
+    <div id="resultModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3>Resultado de la Prueba</h3>
+            <div id="resultBody" class="result-body"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Cargar información de la API
+    async function loadAPIInfo() {
+        try {
+            const response = await fetch('/api/v1/health');
+            const data = await response.json();
+            
+            document.getElementById('api-status').textContent = data.status.toUpperCase();
+            document.getElementById('api-status').className = `status-badge status-${data.status}`;
+        } catch (error) {
+            console.error('Error cargando información de la API:', error);
+        }
+    }
+
+    // Probar un endpoint
+    async function testEndpoint(endpoint) {
+        try {
+            const response = await fetch(endpoint);
+            const data = await response.json();
+            
+            showResult(endpoint, data, response.status);
+        } catch (error) {
+            showResult(endpoint, { error: error.message }, 500);
+        }
+    }
+
+    // Mostrar resultado en modal
+    function showResult(endpoint, data, status) {
+        const modal = document.getElementById('resultModal');
+        const resultBody = document.getElementById('resultBody');
+        
+        resultBody.innerHTML = `
+            <div class="result-info">
+                <p><strong>Endpoint:</strong> <code>${endpoint}</code></p>
+                <p><strong>Status:</strong> <span class="status-code ${status === 200 ? 'success' : 'error'}">${status}</span></p>
+            </div>
+            <div class="result-json">
+                <pre>${JSON.stringify(data, null, 2)}</pre>
+            </div>
+        `;
+        
+        modal.style.display = 'block';
+    }
+
+    // Cerrar modal
+    function closeModal() {
+        document.getElementById('resultModal').style.display = 'none';
+    }
+
+    // Cerrar modal al hacer clic fuera
+    window.onclick = function(event) {
+        const modal = document.getElementById('resultModal');
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    // Cargar información al iniciar
+    document.addEventListener('DOMContentLoaded', loadAPIInfo);
+</script>
+{% endblock %}
