@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Inicio - Videojuegos Dashboard{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="hero-content">
+        <h2>Bienvenido al Dashboard de Videojuegos</h2>
+        <p>Explora datos fascinantes sobre la industria de los videojuegos: plataformas, géneros, ventas y más.</p>
+        <div class="hero-buttons">
+            <a href="/analytics" class="btn btn-primary">Ver Análisis</a>
+            <a href="/games" class="btn btn-secondary">Explorar Videojuegos</a>
+        </div>
+    </div>
+</div>
+
+<div class="stats-container">
+    <div class="stat-card">
+        <div class="stat-icon">🎮</div>
+        <div class="stat-content">
+            <h3 id="total-games">-</h3>
+            <p>Videojuegos</p>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">💻</div>
+        <div class="stat-content">
+            <h3 id="total-platforms">-</h3>
+            <p>Plataformas</p>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">🎯</div>
+        <div class="stat-content">
+            <h3 id="total-genres">-</h3>
+            <p>Géneros</p>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">🏢</div>
+        <div class="stat-content">
+            <h3 id="total-publishers">-</h3>
+            <p>Editores</p>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">💰</div>
+        <div class="stat-content">
+            <h3 id="global-sales">-</h3>
+            <p>Ventas Globales (M)</p>
+        </div>
+    </div>
+</div>
+
+<div class="content-section">
+    <h2>Información del Sistema</h2>
+    <div class="info-grid">
+        <div class="info-box">
+            <h3>📊 Análisis Completo</h3>
+            <p>Visualiza gráficos interactivos con datos sobre ventas por región, plataformas más populares, géneros favoritos y más.</p>
+        </div>
+        <div class="info-box">
+            <h3>🔍 Búsqueda Avanzada</h3>
+            <p>Filtra videojuegos por plataforma, género, editor y más. Accede a información detallada de cada título.</p>
+        </div>
+        <div class="info-box">
+            <h3>📈 Estadísticas</h3>
+            <p>Descubre tendencias en la industria de videojuegos con datos de ventas, calificaciones y puntuaciones de críticos.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Cargar estadísticas generales
+    async function loadStats() {
+        try {
+            const response = await fetch('/api/v1/stats');
+            const data = await response.json();
+            
+            // Acceder a los datos dentro de data.data
+            const stats = data.data;
+            
+            document.getElementById('total-games').textContent = stats.total_games.toLocaleString();
+            document.getElementById('total-platforms').textContent = stats.total_platforms;
+            document.getElementById('total-genres').textContent = stats.total_genres;
+            document.getElementById('total-publishers').textContent = stats.total_publishers;
+            document.getElementById('global-sales').textContent = stats.global_sales.toFixed(2);
+        } catch (error) {
+            console.error('Error cargando estadísticas:', error);
+        }
+    }
+
+    // Ejecutar al cargar la página
+    document.addEventListener('DOMContentLoaded', loadStats);
+</script>
+{% endblock %}

@@ -1,0 +1,315 @@
+{% extends "base.html" %}
+
+{% block title %}Análisis - Videojuegos Dashboard{% endblock %}
+
+{% block content %}
+<div class="analytics-container">
+    <h1>Análisis de Datos de Videojuegos</h1>
+    
+    <div class="charts-grid">
+        <!-- Ventas por Región -->
+        <div class="chart-card">
+            <h3>Ventas por Región</h3>
+            <canvas id="salesByRegionChart"></canvas>
+        </div>
+
+        <!-- Plataformas Principales -->
+        <div class="chart-card">
+            <h3>Top 10 Plataformas</h3>
+            <canvas id="topPlatformsChart"></canvas>
+        </div>
+
+        <!-- Géneros Principales -->
+        <div class="chart-card">
+            <h3>Ventas por Género</h3>
+            <canvas id="topGenresChart"></canvas>
+        </div>
+
+        <!-- Distribución de Calificaciones -->
+        <div class="chart-card">
+            <h3>Distribución de Calificaciones ESRB</h3>
+            <canvas id="ratingDistributionChart"></canvas>
+        </div>
+
+        <!-- Puntuaciones de Críticos -->
+        <div class="chart-card">
+            <h3>Puntuaciones de Críticos</h3>
+            <canvas id="criticScoreChart"></canvas>
+        </div>
+
+        <!-- Top 15 Editores -->
+        <div class="chart-card">
+            <h3>Top 15 Editores</h3>
+            <canvas id="topPublishersChart"></canvas>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Configuración global de Chart.js
+    Chart.defaults.font.family = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+    Chart.defaults.color = '#666';
+
+    const chartColors = {
+        primary: '#6366f1',
+        secondary: '#ec4899',
+        success: '#10b981',
+        warning: '#f59e0b',
+        danger: '#ef4444',
+        info: '#3b82f6'
+    };
+
+    // Gráfico de Ventas por Región
+    async function loadSalesByRegion() {
+        try {
+            const response = await fetch('/api/v1/sales-by-region');
+            const data = await response.json();
+            const regionData = data.data;
+            
+            const ctx = document.getElementById('salesByRegionChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['América del Norte', 'Europa', 'Japón', 'Otros'],
+                    datasets: [{
+                        data: [regionData.NA, regionData.EU, regionData.JP, regionData.Other],
+                        backgroundColor: [
+                            '#6366f1',
+                            '#ec4899',
+                            '#f59e0b',
+                            '#10b981'
+                        ],
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        } catch (error) {
+            console.error('Error cargando ventas por región:', error);
+        }
+    }
+
+    // Gráfico de Top Plataformas
+    async function loadTopPlatforms() {
+        try {
+            const response = await fetch('/api/v1/top-platforms');
+            const data = await response.json();
+            const platformData = data.data;
+            
+            const ctx = document.getElementById('topPlatformsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: platformData.platforms,
+                    datasets: [{
+                        label: 'Ventas Globales (M)',
+                        data: platformData.sales,
+                        backgroundColor: chartColors.primary,
+                        borderColor: chartColors.primary,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            display: true
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        } catch (error) {
+            console.error('Error cargando plataformas:', error);
+        }
+    }
+
+    // Gráfico de Top Géneros
+    async function loadTopGenres() {
+        try {
+            const response = await fetch('/api/v1/top-genres');
+            const data = await response.json();
+            const genreData = data.data;
+            
+            const ctx = document.getElementById('topGenresChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: genreData.genres,
+                    datasets: [{
+                        label: 'Ventas Globales (M)',
+                        data: genreData.sales,
+                        backgroundColor: chartColors.secondary,
+                        borderColor: chartColors.secondary,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    indexAxis: 'x',
+                    plugins: {
+                        legend: {
+                            display: true
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        } catch (error) {
+            console.error('Error cargando géneros:', error);
+        }
+    }
+
+    // Gráfico de Distribución de Calificaciones
+    async function loadRatingDistribution() {
+        try {
+            const response = await fetch('/api/v1/rating-distribution');
+            const data = await response.json();
+            const ratingData = data.data;
+            
+            const ctx = document.getElementById('ratingDistributionChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ratingData.ratings,
+                    datasets: [{
+                        label: 'Cantidad de Juegos',
+                        data: ratingData.counts,
+                        backgroundColor: chartColors.success,
+                        borderColor: chartColors.success,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            display: true
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        } catch (error) {
+            console.error('Error cargando distribución de calificaciones:', error);
+        }
+    }
+
+    // Gráfico de Puntuaciones de Críticos
+    async function loadCriticScore() {
+        try {
+            const response = await fetch('/api/v1/critic-score-distribution');
+            const data = await response.json();
+            const criticData = data.data;
+            
+            const ctx = document.getElementById('criticScoreChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: criticData.scores,
+                    datasets: [{
+                        data: criticData.counts,
+                        backgroundColor: [
+                            '#10b981',
+                            '#f59e0b',
+                            '#ef4444',
+                            '#6366f1'
+                        ],
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        } catch (error) {
+            console.error('Error cargando puntuaciones de críticos:', error);
+        }
+    }
+
+    // Gráfico de Top Editores
+    async function loadTopPublishers() {
+        try {
+            const response = await fetch('/api/v1/top-publishers');
+            const data = await response.json();
+            const publisherData = data.data;
+            
+            const ctx = document.getElementById('topPublishersChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: publisherData.publishers,
+                    datasets: [{
+                        label: 'Ventas Globales (M)',
+                        data: publisherData.sales,
+                        backgroundColor: chartColors.warning,
+                        borderColor: chartColors.warning,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            display: true
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        } catch (error) {
+            console.error('Error cargando editores:', error);
+        }
+    }
+
+    // Cargar todos los gráficos
+    document.addEventListener('DOMContentLoaded', () => {
+        loadSalesByRegion();
+        loadTopPlatforms();
+        loadTopGenres();
+        loadRatingDistribution();
+        loadCriticScore();
+        loadTopPublishers();
+    });
+</script>
+{% endblock %}
